@@ -22,24 +22,24 @@ func main() {
 
 type Scenario struct {
 	ID          int      `json:"id"`
-	Title       string   `json:"title"`
-	Description string   `json:"description"`
-	Themes      []string `json:"themes"`
+	Tittel      string   `json:"title"`
+	Beskrivelse string   `json:"description"`
+	Temaer      []string `json:"themes"`
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
 	scenarios := []Scenario{
 		{
 			ID:          1,
-			Title:       "Feilkonfigurasjon i IAM gir uautorisert tilgang",
-			Description: "En ny IAM-policy ble rullet ut uten test. Dette ga tilgang til sensitive data.",
-			Themes:      []string{"IAM", "Personvern"},
+			Tittel:      "Feilkonfigurasjon i IAM gir uautorisert tilgang",
+			Beskrivelse: "En ny IAM-policy ble rullet ut uten test. Dette ga tilgang til sensitive data.",
+			Temaer:      []string{"IAM", "Personvern"},
 		},
 		{
 			ID:          2,
-			Title:       "Endring i skytjeneste uten rollback",
-			Description: "En oppgradering førte til driftsstans uten mulighet for reversering.",
-			Themes:      []string{"Endringshåndtering", "Drift"},
+			Tittel:      "Endring i skytjeneste uten rollback",
+			Beskrivelse: "En oppgradering førte til driftsstans uten mulighet for reversering.",
+			Temaer:      []string{"Endringshåndtering", "Drift"},
 		},
 	}
 
