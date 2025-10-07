@@ -1,2 +1,13 @@
 # scenario-banken
 En enkel go applikasjon for et scenariobank-api 
+
+
+
+
+# Logo og favicon
+This favicon was generated using the following font:
+
+- Font Title: Leckerli One
+- Font Author: undefined
+- Font Source: https://fonts.gstatic.com/s/leckerlione/v21/V8mCoQH8VCsNttEnxnGQ-1itLZxcBtItFw.ttf
+- Font License: undefined)
