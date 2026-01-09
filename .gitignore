@@ -36,3 +36,4 @@ tmp/
 # macOS system files
 .DS_Store
 **/.DS_Store
+ui/static/.DS_Store
