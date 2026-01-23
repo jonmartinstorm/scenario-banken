@@ -1,32 +1,28 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-	"html/template"
 	"net/http"
 	"strconv"
+
+	"github.com/jonmartinstorm/scenario-banken/internal/models"
 )
 
 func (app *application) getHome(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Add("Server", "Go")
 
-	files := []string{
-		"./ui/html/base.tmpl",
-		"./ui/html/partials/nav.tmpl",
-		"./ui/html/pages/home.tmpl",
-	}
-
-	ts, err := template.ParseFiles(files...)
+	scenarioer, err := app.scenarioer.Latest()
 	if err != nil {
 		app.serverError(w, r, err)
 		return
 	}
 
-	err = ts.ExecuteTemplate(w, "base", nil)
-	if err != nil {
-		app.serverError(w, r, err)
-	}
+	data := app.newTemplateData(r)
+	data.Scenarioer = scenarioer
+
+	app.render(w, r, http.StatusOK, "home.tmpl", data)
 }
 
 func (app *application) getScenarioView(w http.ResponseWriter, r *http.Request) {
@@ -36,7 +32,20 @@ func (app *application) getScenarioView(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	fmt.Fprintf(w, "Vise et scenario med id %d", id)
+	scenario, err := app.scenarioer.Get(id)
+	if err != nil {
+		if errors.Is(err, models.ErrNoRecord) {
+			http.NotFound(w, r)
+		} else {
+			app.serverError(w, r, err)
+		}
+		return
+	}
+
+	data := app.newTemplateData(r)
+	data.Scenario = scenario
+
+	app.render(w, r, http.StatusOK, "view.tmpl", data)
 }
 
 func (app *application) getScenarioCreate(w http.ResponseWriter, r *http.Request) {
@@ -44,6 +53,16 @@ func (app *application) getScenarioCreate(w http.ResponseWriter, r *http.Request
 }
 
 func (app *application) postScenarioCreate(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusCreated)
-	w.Write([]byte("Hello fra create post"))
+	title := "Superfarlig"
+	content := "En superfarlig hendelse \n og masse andre ting \n som newlines"
+	scenariotype := "Nasjonal sikkerhet"
+	expires := 7
+
+	id, err := app.scenarioer.Insert(title, content, scenariotype, expires)
+	if err != nil {
+		app.serverError(w, r, err)
+		return
+	}
+
+	http.Redirect(w, r, fmt.Sprintf("/scenario/view/%d", id), http.StatusSeeOther)
 }

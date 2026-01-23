@@ -2,5 +2,24 @@
 
 {{define "main"}}
     <h2>Scenarioer</h2>
+    {{if .Scenarioer}}
+        <table>
+            <tr>
+                <th>Title</th>
+                <th>Scenario Type</th>
+                <th>Created</th>
+                <th>ID</th>
+            </tr>
+            {{range .Scenarioer}}
+            <tr>
+                <th><a href="/scenario/view/{{.ID}}">{{.Title}}</a></th>
+                <th>{{.ScenarioType}}</th>
+                <th>{{humanDate .Created}}</th>
+                <th>#{{.ID}}</th>
+            </tr>
+            {{end}}
+        </table>
+    {{else}}
     <p>Ikke noe å se her enda.</P>
+    {{end}}
 {{end}}
